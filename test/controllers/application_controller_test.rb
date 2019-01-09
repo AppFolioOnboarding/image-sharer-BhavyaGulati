@@ -8,8 +8,4 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     assert_select 'h1', 'Hello Bhavya'
   end
 
-  test "should get app;lication index" do
-    get application_index_url
-    assert_response :ok
-  end
 end
