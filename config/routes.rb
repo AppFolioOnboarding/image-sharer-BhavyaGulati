@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  root 'application#index' # default path
-  # resources :application
+  root 'images#new' # default path
+  resources :images, only: %i[new create show]
 end
