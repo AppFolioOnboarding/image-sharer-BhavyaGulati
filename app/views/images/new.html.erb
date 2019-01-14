@@ -1,0 +1,16 @@
+<h1>Upload Image URL!</h1>
+
+<%= form_for(@image, url: {action: "create"}, class: 'js-form-image') do |f| %>
+    <%= f.text_field :url %>
+
+    <%= f.submit "Create" %>
+
+<% end %>
+
+<% if @image.errors.any? %>
+    <% @image.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+    <% end %>
+<% end %>
+
+
