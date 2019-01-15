@@ -10,4 +10,10 @@ class ImageTest < ActiveSupport::TestCase
     assert_not_predicate image_invalid, :valid?
     assert_equal 'is not a valid HTTP URL', image_invalid.errors[:url].join('; ')
   end
+
+  test 'image is invalid with a blank url' do
+    image_invalid = Image.new(url: '')
+    assert_not_predicate image_invalid, :valid?
+    assert_equal "can't be blank", image_invalid.errors[:url].join('; ')
+  end
 end
