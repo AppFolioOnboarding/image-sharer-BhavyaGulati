@@ -15,5 +15,8 @@ class ImagesController < ApplicationController
 
   def show
     @image_url = Image.find(params[:id]).url
+  rescue ActiveRecord::RecordNotFound
+    flash[:danger] = 'Id not found'
+    redirect_to action: :new
   end
 end

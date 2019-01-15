@@ -6,11 +6,17 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select 'form', count: 1
   end
 
-  def test_show
+  def test_show__image_found
     image = Image.first
     get image_path(image)
     assert_response :ok
     assert_select 'img', count: 1
+  end
+
+  def test_show__image_not_found
+    get image_path(-1)
+    assert_redirected_to root_path
+    assert_equal 'Id not found', flash[:danger]
   end
 
   def test_create__valid
