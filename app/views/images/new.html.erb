@@ -1,5 +1,12 @@
 <h1>Upload Image URL!</h1>
 
+<div class="container">
+  <% flash.each do |key, value| %>
+      <div class="alert alert-<%= key %>"><%= value %></div>
+  <% end %>
+  <%= yield %>
+</div>
+
 <%= form_for(@image, url: {action: "create"}, class: 'js-form-image') do |f| %>
     <%= f.text_field :url %>
 

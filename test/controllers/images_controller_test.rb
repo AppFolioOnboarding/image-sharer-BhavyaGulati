@@ -26,6 +26,8 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
       post images_path, params: { image: {
         url: 'htearn.appfolio.com/apm/www/images/apm-logo-v2.png'
       } }
+      assert_response :unprocessable_entity
+      assert_select '.alert.alert-danger', text: 'Could not save an image'
     end
   end
 end

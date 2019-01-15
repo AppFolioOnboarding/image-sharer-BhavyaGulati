@@ -8,7 +8,8 @@ class ImagesController < ApplicationController
     if @image.save
       redirect_to image_path(@image)
     else
-      render 'new'
+      flash[:danger] = 'Could not save an image'
+      render 'new', status: :unprocessable_entity
     end
   end
 
