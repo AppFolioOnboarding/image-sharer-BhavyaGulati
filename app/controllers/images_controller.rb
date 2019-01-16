@@ -19,4 +19,8 @@ class ImagesController < ApplicationController
     flash[:danger] = 'Id not found'
     redirect_to action: :new
   end
+
+  def index
+    @images = Image.all.order('created_at DESC')
+  end
 end
