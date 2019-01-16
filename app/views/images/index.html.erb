@@ -1,0 +1,6 @@
+<h1>All Images</h1>
+<ul>
+  <% @images.each do |image| %>
+      <li><%= image_tag(image.url, 'max-width': '400px') %></li>
+  <% end %>
+</ul>
