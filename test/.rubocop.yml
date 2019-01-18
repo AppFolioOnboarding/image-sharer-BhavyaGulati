@@ -11,3 +11,6 @@ Metrics/MethodLength:
 
 Metrics/PerceivedComplexity:
   Enabled: false
+
+Metrics/LineLength:
+  Max: 500

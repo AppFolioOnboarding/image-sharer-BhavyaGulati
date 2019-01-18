@@ -1,5 +1,5 @@
 require 'test_helper'
-class ImagesControllerTest < ActionDispatch::IntegrationTest
+class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
   def test_new
     get new_image_path
     assert_response :ok
