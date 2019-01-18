@@ -1,1 +1,11 @@
 <%= image_tag(@image_url) %>
+<% if @params_tag_list.present? %>
+    <p>Tags List</p>
+<% else %>
+    <p></p>
+<% end %>
+<ul class='tag_list'>
+  <% @params_tag_list.each do |tag| %>
+      <li class='tag_list_class'><%= tag %></li>
+  <% end %>
+</ul>

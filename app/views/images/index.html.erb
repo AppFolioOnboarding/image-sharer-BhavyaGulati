@@ -1,6 +1,19 @@
 <h1>All Images</h1>
-<ul>
+
+<ul class='image_list'>
   <% @images.each do |image| %>
-      <li><%= image_tag(image.url, 'max-width': '400px') %></li>
-  <% end %>
+    <% if image.tag_list.present? %>
+      <p>Tags List</p>
+    <% else %>
+      <p></p>
+    <% end %>
+
+    <ul class='tag_list'>
+      <% image.tag_list.each do |tag| %>
+          <li  class='tag_list_class'><%= tag %></li>
+      <% end %>
+    </ul>
+    <li class='image_list_element'><%= image_tag(image.url, 'max-width': '400px') %></li>
+<% end %>
 </ul>
+

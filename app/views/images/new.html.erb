@@ -8,8 +8,8 @@
 </div>
 
 <%= form_for(@image, url: {action: "create"}, class: 'js-form-image') do |f| %>
-    <%= f.text_field :url %>
-
+    <%= f.text_field :url, placeholder: 'Image URL'%><br />
+    <%= f.text_field :tag_list, placeholder: 'Tags (comma separated)', size: "30", value: f.object.tag_list.to_s %><br />
     <%= f.submit "Create" %>
 
 <% end %>
@@ -19,5 +19,3 @@
         <li><%= message %></li>
     <% end %>
 <% end %>
-
-
