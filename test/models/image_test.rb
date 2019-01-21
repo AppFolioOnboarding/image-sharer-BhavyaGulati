@@ -16,4 +16,15 @@ class ImageTest < ActiveSupport::TestCase
     assert_not_predicate image_invalid, :valid?
     assert_equal "can't be blank", image_invalid.errors[:url].join('; ')
   end
+  test 'image creation with no tags' do
+    image_valid = Image.new(url: 'https://www.appfolio.com/images/html/apm-fb-logo.png', tag_list: %w[])
+    assert_predicate image_valid, :valid?
+  end
+
+  test 'image creation with tags' do
+    image_valid = Image.new(url: 'https://www.appfolio.com/images/html/apm-fb-logo.png', tag_list: %w[abc xyz])
+    assert_predicate image_valid, :valid?
+    assert_equal image_valid.tag_list.count, 2
+    assert_equal %w[abc xyz], image_valid.tag_list
+  end
 end

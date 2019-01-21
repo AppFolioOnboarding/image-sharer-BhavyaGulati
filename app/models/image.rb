@@ -16,5 +16,6 @@ class HttpUrlValidator < ActiveModel::EachValidator
 end
 
 class Image < ApplicationRecord
+  acts_as_taggable_on :tags
   validates :url, http_url: true
 end
