@@ -137,9 +137,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     get tag_path('Gmap')
     assert_response :ok
     assert_select 'ul.tag_list', count: 2
-    assert_select 'body > ul > ul:nth-child(2) > li', count: 2
-    assert_select 'body > ul > ul:nth-child(2) > li:nth-child(1)', 'abc'
-    assert_select 'body > ul > ul:nth-child(2) > li:nth-child(2)', 'Gmap'
+    assert_select 'body > ul > ul:nth-child(2) > li > a', count: 2
+    assert_select 'body > ul > ul:nth-child(2) > li:nth-child(1) > a', 'abc'
+    assert_select 'body > ul > ul:nth-child(2) > li:nth-child(2) > a', 'Gmap'
   end
 
   def test_index__image_by_tag__tag_not_found
