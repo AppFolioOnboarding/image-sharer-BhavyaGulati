@@ -14,7 +14,7 @@ class ImagesController < ApplicationController
   end
 
   def show
-    @params_tag_list = Image.find(params[:id]).tag_list
+    @image = Image.find(params[:id])
     @image_url = Image.find(params[:id]).url
   rescue ActiveRecord::RecordNotFound
     flash[:danger] = 'Id not found'
