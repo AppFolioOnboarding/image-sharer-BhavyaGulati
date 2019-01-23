@@ -5,7 +5,5 @@
     <p></p>
 <% end %>
 <ul class='tag_list'>
-  <% @image.tag_list.each do |tag| %>
-      <li class='tag_list_class'><%= tag %></li>
-  <% end %>
+  <%= render partial: 'images/tag_list', locals: { image: @image } %>
 </ul>
