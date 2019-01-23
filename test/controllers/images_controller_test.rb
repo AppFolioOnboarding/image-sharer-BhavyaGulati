@@ -129,4 +129,23 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     assert_select "ul.image_list li.image_list_element:first-of-type img[src='#{image_new.url}']", count: 1
     assert_select "ul.image_list li.image_list_element:last-child img[src='#{image_old.url}']", count: 1
   end
+
+  def test_index__image_by_tag__tag_found
+    Image.destroy_all
+    Image.create!(url: 'https://www.xyz.com', tag_list: %w[Gmap earth], created_at: Time.zone.now - 1.hour)
+    Image.create!(url: 'https://www.abc.com', tag_list: %w[abc Gmap], created_at: Time.zone.now)
+    get tag_path('Gmap')
+    assert_response :ok
+    assert_select 'ul.tag_list', count: 2
+    assert_select 'body > ul > ul:nth-child(2) > li', count: 2
+    assert_select 'body > ul > ul:nth-child(2) > li:nth-child(1)', 'abc'
+    assert_select 'body > ul > ul:nth-child(2) > li:nth-child(2)', 'Gmap'
+  end
+
+  def test_index__image_by_tag__tag_not_found
+    get tag_path(-1)
+    assert_response :ok
+    assert_select 'ul.tag_list', count: 0
+    assert_equal 'Tags have no images associated', flash.now[:danger]
+  end
 end
