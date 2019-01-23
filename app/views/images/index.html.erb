@@ -1,5 +1,7 @@
 <h1>All Images</h1>
-
+<% flash.each do |key, value| %>
+  <div class="alert alert-<%= key %>"><%= value %></div>
+<% end %>
 <ul class='image_list'>
   <% @images.each do |image| %>
     <% if image.tag_list.present? %>
@@ -9,11 +11,8 @@
     <% end %>
 
     <ul class='tag_list'>
-      <% image.tag_list.each do |tag| %>
-          <li  class='tag_list_class'><%= tag %></li>
-      <% end %>
+        <%= render partial: 'images/tag_list', locals: { image: image } %>
     </ul>
     <li class='image_list_element'><%= image_tag(image.url, 'max-width': '400px') %></li>
 <% end %>
 </ul>
-
