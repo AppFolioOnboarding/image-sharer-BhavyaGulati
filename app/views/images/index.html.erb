@@ -1,3 +1,5 @@
+<%=  button_to "Clear tag filter" , images_path, method: :get%>
+<%= button_to "Add new image", new_image_path, method: :get %>
 <h3>All Images</h3>
 <% flash.each do |key, value| %>
   <div class="alert alert-<%= key %>"><%= value %></div>
@@ -16,6 +18,9 @@
         <%= render partial: 'images/tag_list', locals: { image: image } %>
       </ul>
 
+    <%= render partial: 'images/image_show', locals: { image: image }%>
+    <br>
+    <br>
     </li>
   <% end %>
 

@@ -11,6 +11,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     get image_path(image)
     assert_response :ok
     assert_select 'img', count: 1
+    assert_select 'form[action= "/images"].button_to', value: 'See all images'
   end
 
   def test_show__image_not_found
@@ -100,6 +101,18 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     get images_path
     assert_response :ok
     assert_select 'h3', 'All Images'
+    assert_select '.button_to', count: 2
+    assert_select 'form[action="/images"].button_to', value: 'Clear tag filter'
+    assert_select 'form[action="/images/new"].button_to', value: 'Add new image'
+  end
+
+  def test_index__some_image_present
+    Image.destroy_all
+    Image.create!(url: 'https://www.xyz.com', tag_list: %w[Gmap earth])
+    get images_path
+    assert_response :ok
+    assert_select 'img', count: 1
+    assert_select '.btn.btn-success', text: 'Show'
   end
 
   def test_index__no_image
