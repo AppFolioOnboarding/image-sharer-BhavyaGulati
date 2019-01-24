@@ -1,6 +1,6 @@
 <h1>Upload Image URL!</h1>
 
-<div class="container">
+<div class="js-container">
   <% flash.each do |key, value| %>
       <div class="alert alert-<%= key %>"><%= value %></div>
   <% end %>
@@ -12,10 +12,13 @@
     <%= f.text_field :tag_list, placeholder: 'Tags (comma separated)', size: "30", value: f.object.tag_list.to_s %><br />
     <%= f.submit "Create" %>
 
-<% end %>
+
 
 <% if @image.errors.any? %>
+  <ul class='js-help-block'>
     <% @image.errors.full_messages.each do |message| %>
         <li><%= message %></li>
     <% end %>
+  </ul>
+<% end %>
 <% end %>

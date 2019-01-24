@@ -23,14 +23,14 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     image = Image.create!(url: 'https://www.xyz.com', tag_list: %w[Gmap earth])
     get image_path(image)
     assert_response :ok
-    assert_select 'li.tag_list_class', count: 2
+    assert_select 'li.js-tag_list_element', count: 2
   end
 
   def test_show__image_found__tag_not_found
     image = Image.create!(url: 'https://www.xyz.com', tag_list: [])
     get image_path(image)
     assert_response :ok
-    assert_select 'li.tag_list_class', count: 0
+    assert_select 'li.js-tag_list_element', count: 0
   end
 
   def test_create__valid
@@ -126,8 +126,8 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     get images_path
     assert_response :ok
 
-    assert_select "ul.image_list li.image_list_element:first-of-type img[src='#{image_new.url}']", count: 1
-    assert_select "ul.image_list li.image_list_element:last-child img[src='#{image_old.url}']", count: 1
+    assert_select "ul.js-image_list li.js-image_list_element:first-of-type img[src='#{image_new.url}']", count: 1
+    assert_select "ul.js-image_list li.js-image_list_element:last-child img[src='#{image_old.url}']", count: 1
   end
 
   def test_index__image_by_tag__tag_found
@@ -136,16 +136,16 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     Image.create!(url: 'https://www.abc.com', tag_list: %w[abc Gmap], created_at: Time.zone.now)
     get tag_path('Gmap')
     assert_response :ok
-    assert_select 'ul.tag_list', count: 2
-    assert_select 'body > ul > ul:nth-child(2) > li > a', count: 2
-    assert_select 'body > ul > ul:nth-child(2) > li:nth-child(1) > a', 'abc'
-    assert_select 'body > ul > ul:nth-child(2) > li:nth-child(2) > a', 'Gmap'
+    assert_select 'ul.js-tag_list', count: 2
+    assert_select 'body > ul > li:nth-child(1) > ul > li > a', count: 2
+    assert_select 'body > ul > li:nth-child(1) > ul > li:nth-child(1) > a', 'abc'
+    assert_select 'body > ul > li:nth-child(1) > ul > li:nth-child(2) > a', 'Gmap'
   end
 
   def test_index__image_by_tag__tag_not_found
     get tag_path(-1)
     assert_response :ok
-    assert_select 'ul.tag_list', count: 0
+    assert_select 'ul.js-tag_list', count: 0
     assert_equal 'Tags have no images associated', flash.now[:danger]
   end
 end
