@@ -39,6 +39,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
         url: 'https://learn.appfolio.com/apm/www/images/apm-logo-v2.png'
       } }
     end
+    assert_redirected_to image_path(Image.last)
+    follow_redirect!
+    assert_select '.alert.alert-success', text: 'You have successfully added an image.'
   end
 
   def test_create__valid__with_tags
@@ -47,6 +50,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
         url: 'https://learn.appfolio.com/apm/www/images/apm-logo-v2.png', tag_list: %w[abc def]
       } }
     end
+    assert_redirected_to image_path(Image.last)
+    follow_redirect!
+    assert_select '.alert.alert-success', text: 'You have successfully added an image.'
   end
 
   def test_create__valid__without_tags
@@ -55,6 +61,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
         url: 'https://learn.appfolio.com/apm/www/images/apm-logo-v2.png', tag_list: []
       } }
     end
+    assert_redirected_to image_path(Image.last)
+    follow_redirect!
+    assert_select '.alert.alert-success', text: 'You have successfully added an image.'
   end
 
   def test_create__invalid
