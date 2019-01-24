@@ -7,7 +7,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   end
 
   def test_show__image_found
-    image = Image.first
+    image = Image.create!(url: 'https://www.xyz.com', tag_list: %w[Gmap earth])
     get image_path(image)
     assert_response :ok
     assert_select 'img', count: 1
