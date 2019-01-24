@@ -12,6 +12,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     assert_response :ok
     assert_select 'img', count: 1
     assert_select 'form[action= "/images"].button_to', value: 'See all images'
+    assert_select '.btn.btn-danger', text: 'Delete'
   end
 
   def test_show__image_not_found
@@ -113,6 +114,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     assert_response :ok
     assert_select 'img', count: 1
     assert_select '.btn.btn-success', text: 'Show'
+    assert_select '.btn.btn-danger', text: 'Delete'
   end
 
   def test_index__no_image
@@ -169,5 +171,19 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     assert_response :ok
     assert_select 'ul.js-tag_list', count: 0
     assert_equal 'Tags have no images associated', flash.now[:danger]
+  end
+
+  def test_destroy
+    Image.destroy_all
+    image = Image.create!(url: 'https://www.xyz.com', tag_list: %w[Gmap earth])
+    delete image_path(image)
+    assert_response :redirect
+    assert_select 'img', count: 0
+  end
+
+  def test_destroy__no_image_found
+    delete image_path(-1)
+    assert_redirected_to images_path
+    assert_equal 'Delete success', flash[:success]
   end
 end
