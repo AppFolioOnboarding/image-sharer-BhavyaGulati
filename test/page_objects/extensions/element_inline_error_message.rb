@@ -14,7 +14,7 @@ module PageObjects
       private
 
       def find_parent
-        node.find(:xpath, "ancestor::*[contains(concat(' ',normalize-space(@class), ' '),' form-group ')][1]")
+        node.find(:xpath, "ancestor::*[contains(concat(' ',normalize-space(@class), ' '),' new_image ')][1]")
       end
     end
   end

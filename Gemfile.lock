@@ -227,8 +227,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  ae_page_objects
   acts-as-taggable-on (~> 6.0)
+  ae_page_objects
   byebug
   capybara
   jquery-rails
