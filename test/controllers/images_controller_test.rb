@@ -90,14 +90,14 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   def test_index
     get images_path
     assert_response :ok
-    assert_select 'h1', 'All Images'
+    assert_select 'h3', 'All Images'
   end
 
   def test_index__no_image
     Image.destroy_all
     get images_path
     assert_response :ok
-    assert_select 'h1', 'All Images'
+    assert_select 'h3', 'All Images'
     assert_select 'img', count: 0
   end
 
@@ -105,17 +105,17 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     Image.create!(url: 'https://www.xyz.com', tag_list: %w[Gmap earth])
     get images_path
     assert_response :ok
-    assert_select 'h1', 'All Images'
-    assert_select 'body > ul > ul:nth-child(2) > li', count: 2
-    assert_select 'body > ul > ul:nth-child(2) > li:nth-child(1)', 'Gmap'
-    assert_select 'body > ul > ul:nth-child(2) > li:nth-child(2)', 'earth'
+    assert_select 'h3', 'All Images'
+    assert_select 'body > ul > li:nth-child(1) > ul > li', count: 2
+    assert_select 'body > ul > li:nth-child(1) > ul > li:nth-child(1)', 'Gmap'
+    assert_select 'body > ul > li:nth-child(1) > ul > li:nth-child(2)', 'earth'
   end
 
   def test_index__no_tags
     Image.create!(url: 'https://www.xyz.com', tag_list: [])
     get images_path
     assert_response :ok
-    assert_select 'h1', 'All Images'
+    assert_select 'h3', 'All Images'
     assert_select 'body > ul > ul:nth-child(2) > li', count: 0
   end
 
