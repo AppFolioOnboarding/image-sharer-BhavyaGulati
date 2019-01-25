@@ -6,6 +6,7 @@ class ImagesController < ApplicationController
   def create
     @image = Image.new(params.require(:image).permit(:url, :tag_list))
     if @image.save
+      flash[:success] = 'You have successfully added an image.'
       redirect_to image_path(@image)
     else
       flash[:danger] = 'Could not save an image'
@@ -28,5 +29,15 @@ class ImagesController < ApplicationController
     else
       @images = Image.all.order('created_at Desc')
     end
+  end
+
+  def destroy
+    @image = Image.find(params[:id])
+    @image.destroy
+    flash[:success] = 'Delete success'
+    redirect_to images_path
+  rescue ActiveRecord::RecordNotFound
+    flash[:success] = 'Delete success'
+    redirect_to images_path
   end
 end

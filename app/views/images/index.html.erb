@@ -1,18 +1,28 @@
-<h1>All Images</h1>
+<%=  button_to "Clear tag filter" , images_path, method: :get%>
+<%= button_to "Add new image", new_image_path, method: :get %>
+<h3>All Images</h3>
 <% flash.each do |key, value| %>
   <div class="alert alert-<%= key %>"><%= value %></div>
 <% end %>
-<ul class='image_list'>
+<ul class='js-image_list'>
   <% @images.each do |image| %>
-    <% if image.tag_list.present? %>
-      <p>Tags List</p>
-    <% else %>
-      <p></p>
-    <% end %>
 
-    <ul class='tag_list'>
+    <li class='js-image_list_element'><%= image_tag(image.url, 'max-width': '400px') %>
+      <% if image.tag_list.present? %>
+        <p>Tags List</p>
+      <% else %>
+        <p></p>
+      <% end %>
+
+      <ul class='js-tag_list'>
         <%= render partial: 'images/tag_list', locals: { image: image } %>
-    </ul>
-    <li class='image_list_element'><%= image_tag(image.url, 'max-width': '400px') %></li>
-<% end %>
+      </ul>
+
+    <%= render partial: 'images/image_show', locals: { image: image }%>
+    <%= render partial: 'images/image_delete', locals: { image: image }%>
+    <br>
+    <br>
+    </li>
+  <% end %>
+
 </ul>

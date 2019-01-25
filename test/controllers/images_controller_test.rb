@@ -7,10 +7,12 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   end
 
   def test_show__image_found
-    image = Image.first
+    image = Image.create!(url: 'https://www.xyz.com', tag_list: %w[Gmap earth])
     get image_path(image)
     assert_response :ok
     assert_select 'img', count: 1
+    assert_select 'form[action= "/images"].button_to', value: 'See all images'
+    assert_select '.btn.btn-danger', text: 'Delete'
   end
 
   def test_show__image_not_found
@@ -23,14 +25,14 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     image = Image.create!(url: 'https://www.xyz.com', tag_list: %w[Gmap earth])
     get image_path(image)
     assert_response :ok
-    assert_select 'li.tag_list_class', count: 2
+    assert_select 'li.js-tag_list_element', count: 2
   end
 
   def test_show__image_found__tag_not_found
     image = Image.create!(url: 'https://www.xyz.com', tag_list: [])
     get image_path(image)
     assert_response :ok
-    assert_select 'li.tag_list_class', count: 0
+    assert_select 'li.js-tag_list_element', count: 0
   end
 
   def test_create__valid
@@ -39,6 +41,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
         url: 'https://learn.appfolio.com/apm/www/images/apm-logo-v2.png'
       } }
     end
+    assert_redirected_to image_path(Image.last)
+    follow_redirect!
+    assert_select '.alert.alert-success', text: 'You have successfully added an image.'
   end
 
   def test_create__valid__with_tags
@@ -47,6 +52,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
         url: 'https://learn.appfolio.com/apm/www/images/apm-logo-v2.png', tag_list: %w[abc def]
       } }
     end
+    assert_redirected_to image_path(Image.last)
+    follow_redirect!
+    assert_select '.alert.alert-success', text: 'You have successfully added an image.'
   end
 
   def test_create__valid__without_tags
@@ -55,6 +63,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
         url: 'https://learn.appfolio.com/apm/www/images/apm-logo-v2.png', tag_list: []
       } }
     end
+    assert_redirected_to image_path(Image.last)
+    follow_redirect!
+    assert_select '.alert.alert-success', text: 'You have successfully added an image.'
   end
 
   def test_create__invalid
@@ -90,14 +101,27 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   def test_index
     get images_path
     assert_response :ok
-    assert_select 'h1', 'All Images'
+    assert_select 'h3', 'All Images'
+    assert_select '.button_to', count: 2
+    assert_select 'form[action="/images"].button_to', value: 'Clear tag filter'
+    assert_select 'form[action="/images/new"].button_to', value: 'Add new image'
+  end
+
+  def test_index__some_image_present
+    Image.destroy_all
+    Image.create!(url: 'https://www.xyz.com', tag_list: %w[Gmap earth])
+    get images_path
+    assert_response :ok
+    assert_select 'img', count: 1
+    assert_select '.btn.btn-success', text: 'Show'
+    assert_select '.btn.btn-danger', text: 'Delete'
   end
 
   def test_index__no_image
     Image.destroy_all
     get images_path
     assert_response :ok
-    assert_select 'h1', 'All Images'
+    assert_select 'h3', 'All Images'
     assert_select 'img', count: 0
   end
 
@@ -105,17 +129,17 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     Image.create!(url: 'https://www.xyz.com', tag_list: %w[Gmap earth])
     get images_path
     assert_response :ok
-    assert_select 'h1', 'All Images'
-    assert_select 'body > ul > ul:nth-child(2) > li', count: 2
-    assert_select 'body > ul > ul:nth-child(2) > li:nth-child(1)', 'Gmap'
-    assert_select 'body > ul > ul:nth-child(2) > li:nth-child(2)', 'earth'
+    assert_select 'h3', 'All Images'
+    assert_select 'body > ul > li:nth-child(1) > ul > li', count: 2
+    assert_select 'body > ul > li:nth-child(1) > ul > li:nth-child(1)', 'Gmap'
+    assert_select 'body > ul > li:nth-child(1) > ul > li:nth-child(2)', 'earth'
   end
 
   def test_index__no_tags
     Image.create!(url: 'https://www.xyz.com', tag_list: [])
     get images_path
     assert_response :ok
-    assert_select 'h1', 'All Images'
+    assert_select 'h3', 'All Images'
     assert_select 'body > ul > ul:nth-child(2) > li', count: 0
   end
 
@@ -126,8 +150,8 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     get images_path
     assert_response :ok
 
-    assert_select "ul.image_list li.image_list_element:first-of-type img[src='#{image_new.url}']", count: 1
-    assert_select "ul.image_list li.image_list_element:last-child img[src='#{image_old.url}']", count: 1
+    assert_select "ul.js-image_list li.js-image_list_element:first-of-type img[src='#{image_new.url}']", count: 1
+    assert_select "ul.js-image_list li.js-image_list_element:last-child img[src='#{image_old.url}']", count: 1
   end
 
   def test_index__image_by_tag__tag_found
@@ -136,16 +160,30 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     Image.create!(url: 'https://www.abc.com', tag_list: %w[abc Gmap], created_at: Time.zone.now)
     get tag_path('Gmap')
     assert_response :ok
-    assert_select 'ul.tag_list', count: 2
-    assert_select 'body > ul > ul:nth-child(2) > li > a', count: 2
-    assert_select 'body > ul > ul:nth-child(2) > li:nth-child(1) > a', 'abc'
-    assert_select 'body > ul > ul:nth-child(2) > li:nth-child(2) > a', 'Gmap'
+    assert_select 'ul.js-tag_list', count: 2
+    assert_select 'body > ul > li:nth-child(1) > ul > li > a', count: 2
+    assert_select 'body > ul > li:nth-child(1) > ul > li:nth-child(1) > a', 'abc'
+    assert_select 'body > ul > li:nth-child(1) > ul > li:nth-child(2) > a', 'Gmap'
   end
 
   def test_index__image_by_tag__tag_not_found
     get tag_path(-1)
     assert_response :ok
-    assert_select 'ul.tag_list', count: 0
+    assert_select 'ul.js-tag_list', count: 0
     assert_equal 'Tags have no images associated', flash.now[:danger]
+  end
+
+  def test_destroy
+    Image.destroy_all
+    image = Image.create!(url: 'https://www.xyz.com', tag_list: %w[Gmap earth])
+    delete image_path(image)
+    assert_response :redirect
+    assert_select 'img', count: 0
+  end
+
+  def test_destroy__no_image_found
+    delete image_path(-1)
+    assert_redirected_to images_path
+    assert_equal 'Delete success', flash[:success]
   end
 end
