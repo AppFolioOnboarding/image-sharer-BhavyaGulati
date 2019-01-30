@@ -3,4 +3,10 @@ Rails.application.routes.draw do
   root 'images#index' # default path
   resources :images, only: %i[new create show index destroy]
   get 'tags/:tag', to: 'images#index', as: :tag
+
+  resources :feedbacks, only: [:new]
+
+  namespace :api do
+    resource :feedbacks, only: [:create]
+  end
 end
