@@ -76,6 +76,10 @@ jobs:
           name: run rubocop
           command: bundle exec rubocop
 
+      - run:
+          name: run react test
+          command: npm run test:react
+
       # collect reports
       - store_test_results:
           path: /tmp/test-results
