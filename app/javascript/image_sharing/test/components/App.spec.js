@@ -4,13 +4,17 @@ import { mount, configure } from 'enzyme';
 import { expect } from 'chai';
 import App from '../../components/App';
 import Adapter from 'enzyme-adapter-react-16';
+import FeedbackStore from "../../stores/FeedbackStore";
+import {Provider} from "mobx-react";
 
 describe('<App />', () => {
   configure({ adapter: new Adapter() });
 
   it('should render sub-components', () => {
     const wrapper = mount(
-      <App stores={[]}/>
+      <Provider stores={{feedbackStore: new FeedbackStore()}}>
+        <App/>
+      </Provider>
     );
 
     expect(wrapper.find('Header')).to.have.lengthOf(1);
