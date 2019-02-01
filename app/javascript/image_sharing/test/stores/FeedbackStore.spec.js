@@ -25,6 +25,6 @@ describe('FeedbackStore', () => {
 
   it('setAlertMessage', () => {
     feedbackStore.setAlertMessage('Feedback submitted');
-    expect(feedbackStore.alertMessage).to.equal('Feedback submitted');
+    expect(feedbackStore.AlertMessage).to.equal('Feedback submitted');
   });
 });

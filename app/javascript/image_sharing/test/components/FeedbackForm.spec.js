@@ -8,6 +8,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import sinon from 'sinon';
 import { FormRow, Alert } from 'react-gears';
 
+
 describe('<FeedbackForm />', () => {
   configure({adapter: new Adapter()});
 
