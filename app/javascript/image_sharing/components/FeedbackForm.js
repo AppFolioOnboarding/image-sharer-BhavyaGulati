@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, FormRow } from 'react-gears';
+import { Button, FormRow, Alert } from 'react-gears';
 import {observer, inject} from 'mobx-react'
 import PropTypes from 'prop-types';
 
@@ -33,6 +33,7 @@ class FeedbackForm extends Component {
   render() {
     return (
       <div className="formGroup">
+        {this.props.stores.feedbackStore.AlertMessage? <Alert color="info" className="alert-message">{this.props.stores.feedbackStore.AlertMessage}</Alert> : null}
         <FormRow label="Your name" value={this.props.stores.feedbackStore.name} onChange={this.handleNameChange} labelSize="lg" width={{}} stacked/>
         <FormRow type="textarea" label="Comment" value={this.props.stores.feedbackStore.feedback} onChange={this.handleFeedbackChange} labelSize="lg" width={{}} stacked/>
         <Button color="primary" disabled={false} outline={false} >
