@@ -1,7 +1,7 @@
 module Api
   class FeedbacksController < ApplicationController
     def create
-      # Implement your create action
+      Feedback.create!(params.require(:feedback).permit(:name, :feedback))
     end
   end
 end

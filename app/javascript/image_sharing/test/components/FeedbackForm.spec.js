@@ -6,7 +6,8 @@ import FeedbackForm from '../../components/FeedbackForm';
 import FeedbackStore from "../../stores/FeedbackStore";
 import Adapter from 'enzyme-adapter-react-16';
 import sinon from 'sinon';
-import { FormRow } from 'react-gears';
+import { FormRow, Alert } from 'react-gears';
+
 
 describe('<FeedbackForm />', () => {
   configure({adapter: new Adapter()});
@@ -51,5 +52,15 @@ describe('<FeedbackForm />', () => {
 
     expect(nameSpy.calledWith(name)).to.be.true;
     expect(feedbackSpy.calledWith(feedback)).to.be.true;
+  });
+
+  it('should display alertMessage', () => {
+    const failure_alert = "Could not save feedback";
+    feedbackStore.setAlertMessage(failure_alert);
+    const wrapper = mount(
+      <FeedbackForm stores={{feedbackStore: feedbackStore}}/>
+    );
+
+    expect(wrapper.find('Alert').at(0).text()).to.equal(failure_alert);
   });
 });
